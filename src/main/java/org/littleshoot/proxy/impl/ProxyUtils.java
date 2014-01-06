@@ -11,8 +11,6 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.LastHttpContent;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collection;
@@ -45,13 +43,8 @@ public class ProxyUtils {
     private static final String hostName;
 
     static {
-        try {
-            final InetAddress localAddress = NetworkUtils.getLocalHost();
-            hostName = localAddress.getHostName();
-        } catch (final UnknownHostException e) {
-            LOG.error("Could not lookup host", e);
-            throw new IllegalStateException("Could not determine host!", e);
-        }
+        //final InetAddress localAddress = NetworkUtils.getLocalHost();
+        hostName = "localhost"; //localAddress.getHostName();
         final StringBuilder sb = new StringBuilder();
         sb.append("Via: 1.1 ");
         sb.append(hostName);
