@@ -1,8 +1,7 @@
 package org.littleshoot.proxy.impl;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.helpers.MessageFormatter;
-import org.slf4j.spi.LocationAwareLogger;
 
 /**
  * <p>
@@ -18,84 +17,75 @@ import org.slf4j.spi.LocationAwareLogger;
  */
 class ProxyConnectionLogger {
     private final ProxyConnection connection;
-    private final LocationAwareLogger logger;
+    private final Logger logger;
     private final String fqcn = this.getClass().getCanonicalName();
 
     public ProxyConnectionLogger(ProxyConnection connection) {
         this.connection = connection;
-        this.logger = (LocationAwareLogger) LoggerFactory.getLogger(connection
+        this.logger = LoggerFactory.getLogger(connection
                 .getClass());
     }
 
     protected void error(String message, Object... params) {
         if (logger.isErrorEnabled()) {
-            doLog(LocationAwareLogger.ERROR_INT, message, params, null);
+            logger.error(message, params);
         }
     }
 
     protected void error(String message, Throwable t) {
         if (logger.isErrorEnabled()) {
-            doLog(LocationAwareLogger.ERROR_INT, message, null, t);
+            logger.error(message, t);
         }
     }
 
     protected void warn(String message, Object... params) {
         if (logger.isWarnEnabled()) {
-            doLog(LocationAwareLogger.WARN_INT, message, params, null);
+            logger.warn(message, params);
         }
     }
 
     protected void warn(String message, Throwable t) {
         if (logger.isWarnEnabled()) {
-            doLog(LocationAwareLogger.WARN_INT, message, null, t);
+            logger.warn(message, t);
         }
     }
 
     protected void info(String message, Object... params) {
         if (logger.isInfoEnabled()) {
-            doLog(LocationAwareLogger.INFO_INT, message, params, null);
+            logger.info(message, params);
         }
     }
 
     protected void info(String message, Throwable t) {
         if (logger.isInfoEnabled()) {
-            doLog(LocationAwareLogger.INFO_INT, message, null, t);
+            logger.info(message, t);
         }
     }
 
     protected void debug(String message, Object... params) {
         if (logger.isDebugEnabled()) {
-            doLog(LocationAwareLogger.DEBUG_INT, message, params, null);
+            logger.debug(message, params);
         }
     }
 
     protected void debug(String message, Throwable t) {
         if (logger.isDebugEnabled()) {
-            doLog(LocationAwareLogger.DEBUG_INT, message, null, t);
+            logger.debug(message, t);
         }
     }
 
     protected void log(int level, String message, Object... params) {
-        if (level != LocationAwareLogger.DEBUG_INT || logger.isDebugEnabled()) {
-            doLog(level, message, params, null);
+        if (logger.isTraceEnabled()) {
+            logger.trace(message, params);
         }
     }
     
     protected void log(int level, String message, Throwable t) {
-        if (level != LocationAwareLogger.DEBUG_INT || logger.isDebugEnabled()) {
-            doLog(level, message, null, t);
+        if (logger.isTraceEnabled()) {
+            logger.trace(message, t);
         }
     }
     
-    private void doLog(int level, String message, Object[] params, Throwable t) {
-        String formattedMessage = fullMessage(message);
-        if (params != null && params.length > 0) {
-            formattedMessage = MessageFormatter.arrayFormat(formattedMessage,
-                    params).getMessage();
-        }
-        logger.log(null, fqcn, level, formattedMessage, null, t);
-    }
-
     private String fullMessage(String message) {
         String stateMessage = connection.getCurrentState().toString();
         if (connection.isTunneling()) {
