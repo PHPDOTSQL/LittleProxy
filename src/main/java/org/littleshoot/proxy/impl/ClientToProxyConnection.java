@@ -195,7 +195,8 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
         // Do the pre filtering
         if (shortCircuitRespond(currentFilters.requestPre(httpRequest))) {
-            return DISCONNECT_REQUESTED;
+            //return DISCONNECT_REQUESTED;
+        	return AWAITING_INITIAL;
         }
 
         // Identify our server and chained proxy
@@ -250,7 +251,8 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
 
         modifyRequestHeadersToReflectProxying(httpRequest);
         if (shortCircuitRespond(currentFilters.requestPost(httpRequest))) {
-            return DISCONNECT_REQUESTED;
+            //return DISCONNECT_REQUESTED;
+        	return AWAITING_INITIAL;
         }
 
         LOG.debug("Writing request to ProxyToServerConnection");
@@ -340,7 +342,7 @@ public class ClientToProxyConnection extends ProxyConnection<HttpRequest> {
     private boolean shortCircuitRespond(HttpResponse shortCircuitResponse) {
         if (shortCircuitResponse != null) {
             write(shortCircuitResponse);
-            disconnect();
+            //disconnect();
             return true;
         } else {
             return false;
