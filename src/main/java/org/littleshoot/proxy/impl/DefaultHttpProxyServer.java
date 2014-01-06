@@ -1,6 +1,6 @@
 package org.littleshoot.proxy.impl;
 
-import static org.littleshoot.proxy.TransportProtocol.*;
+import static org.littleshoot.proxy.TransportProtocol.TCP;
 import io.netty.bootstrap.ChannelFactory;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
@@ -15,7 +15,6 @@ import io.netty.channel.group.ChannelGroupFuture;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.channel.udt.nio.NioUdtProvider;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
 import java.io.File;
@@ -35,7 +34,6 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLEngine;
 
@@ -305,12 +303,6 @@ public class DefaultHttpProxyServer implements HttpProxyServer {
                 }
             });
             break;
-        case UDT:
-            LOG.info("Proxy listening with UDT transport");
-            serverBootstrap.channelFactory(NioUdtProvider.BYTE_ACCEPTOR)
-                    .option(ChannelOption.SO_BACKLOG, 10)
-                    .option(ChannelOption.SO_REUSEADDR, true);
-            break;
         default:
             throw new UnknownTransportProtocolError(transportProtocol);
         }
@@ -437,9 +429,6 @@ public class DefaultHttpProxyServer implements HttpProxyServer {
             switch (transportProtocol) {
             case TCP:
                 selectorProvider = SelectorProvider.provider();
-                break;
-            case UDT:
-                selectorProvider = NioUdtProvider.BYTE_PROVIDER;
                 break;
             default:
                 throw new UnknownTransportProtocolError(transportProtocol);
