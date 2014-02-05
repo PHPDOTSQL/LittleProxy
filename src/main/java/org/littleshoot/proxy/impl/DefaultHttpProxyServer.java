@@ -7,7 +7,6 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.ServerChannel;
 import io.netty.channel.group.ChannelGroup;
@@ -34,6 +33,7 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLEngine;
 
@@ -358,9 +358,9 @@ public class DefaultHttpProxyServer implements HttpProxyServer {
      * Represents a group of servers that share thread pools.
      */
     private static class ServerGroup {
-        private static final int INCOMING_ACCEPTOR_THREADS = 2;
-        private static final int INCOMING_WORKER_THREADS = 8;
-        private static final int OUTGOING_WORKER_THREADS = 8;
+        private static final int INCOMING_ACCEPTOR_THREADS = 1;
+        private static final int INCOMING_WORKER_THREADS = 4;
+        private static final int OUTGOING_WORKER_THREADS = 4;
 
         /**
          * A name for this ServerGroup to use in naming threads.
