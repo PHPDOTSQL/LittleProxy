@@ -359,8 +359,8 @@ public class DefaultHttpProxyServer implements HttpProxyServer {
      */
     private static class ServerGroup {
         private static final int INCOMING_ACCEPTOR_THREADS = 1;
-        private static final int INCOMING_WORKER_THREADS = 4;
-        private static final int OUTGOING_WORKER_THREADS = 4;
+        private static final int INCOMING_WORKER_THREADS = 6;
+        private static final int OUTGOING_WORKER_THREADS = 6;
 
         /**
          * A name for this ServerGroup to use in naming threads.
